@@ -1,0 +1,113 @@
+# GitLab MR MCP Server Configuration Template
+#
+# This is a template configuration file for the GitLab MR MCP server.
+# Copy this file to your MCP catalog directory and update the values:
+#
+# 1. Choose a server name (replace "gitlab-mr" if desired)
+# 2. Set your GitLab URL (gitlab.com or self-hosted)
+# 3. Add your GitLab Personal Access Token (with 'api' scope)
+#
+# Example location: ~/.docker/mcp-catalogs/gitlab-mr.yaml
+
+registry:
+  gitlab-mr:  # Server name - customize as needed
+    # Basic Information
+    description: GitLab MR server for reviewing merge requests, comments, approvals, and merges
+    title: GitLab MR
+    type: server
+    dateAdded: "2026-02-05T00:00:00Z"
+    
+    # Docker Image
+    image: geodonz/gitlab-mr-mcp:latest
+    ref: ""
+    
+    # Available Tools (24 total)
+    tools:
+      # Project Discovery
+      - name: search_projects
+      - name: list_my_projects
+      
+      # Merge Request Management
+      - name: list_merge_requests
+      - name: get_merge_request_details
+      - name: create_merge_request
+      - name: update_merge_request
+      - name: merge_merge_request
+      
+      # MR Approvals
+      - name: approve_merge_request
+      - name: unapprove_merge_request
+      
+      # Reviews & Comments
+      - name: get_merge_request_reviews
+      - name: reply_to_review_comment
+      - name: create_review_comment
+      - name: resolve_review_discussion
+      
+      # Commit Discussions
+      - name: get_commit_discussions
+      
+      # Branch & Pipeline
+      - name: get_branch_merge_requests
+      - name: get_merge_request_pipeline
+      - name: get_job_log
+      
+      # Test Reports
+      - name: get_pipeline_test_summary
+      - name: get_merge_request_test_report
+      
+      # Project Information
+      - name: list_project_members
+      - name: list_project_labels
+    
+    # Environment Variables
+    # IMPORTANT: Replace the placeholder values with your actual credentials
+    env:
+      - name: GITLAB_URL
+        value: https://gitlab.com  # Replace with your GitLab instance URL
+      
+      - name: GITLAB_ACCESS_TOKEN
+        value: YOUR_GITLAB_TOKEN_HERE  # ⚠️ REPLACE WITH YOUR ACTUAL TOKEN
+        # To create a token:
+        # 1. Go to: https://gitlab.com/-/user_settings/personal_access_tokens
+        # 2. Click "Add new token"
+        # 3. Name: "MCP GitLab Server" (or your preferred name)
+        # 4. Scopes: Check "api" (full API access)
+        # 5. Create and copy the token (format: glpat-xxxxxxxxxxxxxxxxxxxx)
+    
+    prompts: 0
+    resources: {}
+    
+    # Metadata
+    metadata:
+      category: development
+      tags:
+        - gitlab
+        - merge-requests
+        - code-review
+        - ci-cd
+        - mcp-server
+
+# Usage Instructions:
+#
+# 1. Copy this file to your MCP catalog directory:
+#    cp gitlab-mr-mcp.yaml.template ~/.docker/mcp-catalogs/gitlab-mr.yaml
+#
+# 2. Edit the file and replace placeholder values:
+#    - GITLAB_URL: Your GitLab instance (gitlab.com or self-hosted)
+#    - GITLAB_ACCESS_TOKEN: Your actual GitLab Personal Access Token
+#
+# 3. Enable the server:
+#    docker mcp server enable gitlab-mr
+#
+# 4. Verify it's working:
+#    docker mcp tools list | grep gitlab
+#    docker mcp tools call list_my_projects --args '{"limit": 5}'
+#
+# Self-Hosted GitLab:
+#   If using a self-hosted GitLab instance, change GITLAB_URL to your instance URL:
+#   value: https://gitlab.yourcompany.com
+#
+# Security Note:
+#   This configuration stores your token in plain text. Ensure the file has
+#   appropriate permissions (chmod 600) and is not committed to version control.
